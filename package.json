@@ -32,6 +32,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
+    "build:deploy": "craco build && firebase deploy --only hosting",
     "test": "craco test"
   },
   "eslintConfig": {

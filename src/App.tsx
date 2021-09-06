@@ -5,6 +5,7 @@ import './App.css';
 import { QueryClient } from 'react-query';
 import { Search } from './pages/Search';
 import { BrowserRouter } from 'react-router-dom';
+import { Router } from './router/Router';
 
 export const queryClient = new QueryClient();
 
@@ -13,7 +14,7 @@ function App() {
     <div className='relative'>
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
-          <Search />
+          <Router />
         </QueryClientProvider>
       </BrowserRouter>
     </div>
