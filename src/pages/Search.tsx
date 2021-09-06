@@ -1,14 +1,43 @@
 import { httpsCallable } from 'firebase/functions';
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { QueryClientProvider, useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
+import { useHistory, useLocation } from 'react-router-dom';
+import { debounce } from 'lodash';
 import FirebaseClient from '../api/firebase_client';
 
+// A custom hook that builds on useLocation to parse
+// the query string for you.
+function useSearchQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 export const Search = () => {
-  const handleChange = (e: any) => {
-    console.log(e);
-    searchMutation.mutate(e);
-  };
+  const queryParams = useSearchQuery();
+  const query = queryParams.get('q');
+  console.log(queryParams, query);
+
+  const history = useHistory();
+
+  // const [query, setQuery] = useState("");
+  const handleChange = debounce((value: string) => {
+    history.push(`/search?q=${value}`);
+  }, 500);
+
+  const { data: results, isLoading } = useQuery(
+    ['search', { query }],
+    async () => {
+      if (!query) return;
+      const results = (await httpsCallable(
+        FirebaseClient.functions,
+        'search',
+      )({ query })) as any;
+
+      console.log(results);
+      return results;
+    },
+    { enabled: !!query },
+  );
 
   const searchMutation = useMutation(
     async (query) => {
