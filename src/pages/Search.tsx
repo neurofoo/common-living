@@ -6,6 +6,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { debounce } from 'lodash';
 import FirebaseClient from '../api/firebase_client';
 import { DetailResult } from '../components/ResultDetail';
+import { SearchResult } from '../components/SearchResult';
 
 // A custom hook that builds on useLocation to parse
 // the query string for you.
@@ -91,7 +92,9 @@ export const Search = () => {
         </div>
       </nav>
 
+      {/* Show the selected item */}
       {show === 'selected' && <DetailResult item={selected} />}
+
       {/* Search Results Outlets */}
       {show === 'search' && (
         <section className='mx-auto max-w-7xl overflow-y-auto'>
@@ -100,29 +103,23 @@ export const Search = () => {
               <svg className='animate-spin h-24 w-24' viewBox='0 0 24 24'></svg>
             </div>
           )}
+
           {/* Show 'nothing found' on the empty set */}
           {data?.length === 0 && (
             <div className='bg-red-100 '>
               <p className='font-bold text-center text-3xl'>Nothing found :(</p>
             </div>
           )}
+
+          {/* Show search results */}
           <ul className='space-y-2'>
             {data?.map((item: any) => {
               return (
-                <li
-                  className='p-2 flex border shadow hover:shadow-2xl overflow-hidden'
-                  key={item._id}
-                  onClick={() => handleSelect(item)}>
-                  <img
-                    className=''
-                    src={item?.picture || '/32x32.png'}
-                    alt={item?.name || 'search result icon'}
-                  />
-                  <div className='ml-5'>
-                    <h1>{item.name}</h1>
-                    <p className='max-w-sm truncate'>{item.description}</p>
-                  </div>
-                </li>
+                <SearchResult
+                  key={item.id}
+                  item={item}
+                  handleSelect={() => handleSelect(item)}
+                />
               );
             })}
           </ul>
