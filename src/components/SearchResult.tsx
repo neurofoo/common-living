@@ -8,7 +8,7 @@ export const SearchResult = ({
   return (
     <li
       role='button'
-      className='p-2 flex border shadow hover:shadow-2xl overflow-hidden'
+      className='mx-5 p-2 flex border shadow hover:shadow-2xl overflow-hidden'
       key={item._id}
       onClick={() => handleSelect(item)}>
       <img
@@ -16,7 +16,7 @@ export const SearchResult = ({
         src={item?.picture || '/32x32.png'}
         alt={item?.name || 'search result icon'}
       />
-      <div className='ml-5'>
+      <div className='ml-5 overflow-hidden'>
         <h1>{item.name}</h1>
         <p className='max-w-sm truncate'>{item.description}</p>
       </div>
